@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>seesternn</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@300;400;500&family=Geist:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0a;
+    --bg2: #111111;
+    --bg3: #161616;
+    --border: #222222;
+    --text: #e8e8e8;
+    --muted: #555555;
+    --accent: #7c6af7;
+    --accent2: #4fd1c5;
+    --mono: 'Geist Mono', monospace;
+    --sans: 'Geist', sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.7;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* subtle grid bg */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(124,106,247,.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(124,106,247,.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .wrap {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 0 24px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* NAV */
+  nav {
+    padding: 28px 0 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .nav-logo {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--muted);
+    letter-spacing: .04em;
+  }
+
+  .nav-logo span { color: var(--accent); }
+
+  .nav-links {
+    display: flex;
+    gap: 24px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--muted);
+    text-decoration: none;
+    letter-spacing: .04em;
+    transition: color .2s;
+  }
+
+  .nav-links a:hover { color: var(--text); }
+
+  /* HERO */
+  .hero {
+    padding: 96px 0 72px;
+    opacity: 0;
+    transform: translateY(16px);
+    animation: fadeUp .6s ease forwards .1s;
+  }
+
+  .hero-tag {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+
+  h1 {
+    font-family: var(--mono);
+    font-size: clamp(32px, 6vw, 48px);
+    font-weight: 400;
+    letter-spacing: -.02em;
+    line-height: 1.15;
+    color: var(--text);
+    margin-bottom: 20px;
+  }
+
+  h1 .cursor {
+    display: inline-block;
+    width: 3px;
+    height: .9em;
+    background: var(--accent);
+    margin-left: 2px;
+    vertical-align: middle;
+    animation: blink 1.1s step-end infinite;
+  }
+
+  .hero-desc {
+    font-size: 15px;
+    color: var(--muted);
+    max-width: 480px;
+    line-height: 1.75;
+  }
+
+  .hero-desc strong { color: var(--text); font-weight: 400; }
+
+  /* DIVIDER */
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 0;
+  }
+
+  /* SECTIONS */
+  section {
+    padding: 56px 0;
+    opacity: 0;
+    transform: translateY(12px);
+    animation: fadeUp .5s ease forwards;
+  }
+
+  section:nth-of-type(1) { animation-delay: .25s; }
+  section:nth-of-type(2) { animation-delay: .35s; }
+  section:nth-of-type(3) { animation-delay: .45s; }
+
+  .section-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    margin-bottom: 28px;
+  }
+
+  /* ABOUT */
+  .about-text {
+    color: var(--muted);
+    font-size: 15px;
+    line-height: 1.85;
+  }
+
+  .about-text strong { color: var(--text); font-weight: 400; }
+
+  /* STACK */
+  .stack-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .tag {
+    font-family: var(--mono);
+    font-size: 12px;
+    padding: 5px 12px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--muted);
+    background: var(--bg2);
+    transition: border-color .2s, color .2s;
+  }
+
+  .tag:hover { border-color: var(--accent); color: var(--text); }
+
+  .tag.hl { border-color: #2a2a2a; color: var(--text); }
+
+  /* PROJECTS */
+  .project-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 24px 28px;
+    transition: border-color .2s, background .2s;
+    text-decoration: none;
+    display: block;
+    color: inherit;
+  }
+
+  .project-card:hover {
+    border-color: var(--accent);
+    background: var(--bg3);
+  }
+
+  .project-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 10px;
+  }
+
+  .project-name {
+    font-family: var(--mono);
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text);
+  }
+
+  .project-link-icon {
+    color: var(--muted);
+    flex-shrink: 0;
+    margin-top: 2px;
+    transition: color .2s;
+  }
+
+  .project-card:hover .project-link-icon { color: var(--accent); }
+
+  .project-desc {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.7;
+    margin-bottom: 16px;
+  }
+
+  .project-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .project-tag {
+    font-family: var(--mono);
+    font-size: 11px;
+    padding: 3px 9px;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    color: var(--muted);
+  }
+
+  /* FOOTER */
+  footer {
+    padding: 32px 0 48px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    opacity: 0;
+    animation: fadeUp .5s ease forwards .55s;
+  }
+
+  .footer-text {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  .footer-quote {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: #333;
+    font-style: italic;
+  }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 480px) {
+    .nav-links { gap: 16px; }
+    .hero { padding: 64px 0 48px; }
+    section { padding: 40px 0; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <nav>
+    <div class="nav-logo"><span>~/</span>seesternn</div>
+    <ul class="nav-links">
+      <li><a href="#about">hakkımda</a></li>
+      <li><a href="#stack">stack</a></li>
+      <li><a href="#projects">projeler</a></li>
+    </ul>
+  </nav>
+
+  <div class="hero">
+    <div class="hero-tag">// lise öğrencisi · maker · geliştirici</div>
+    <h1>seesternn<span class="cursor"></span></h1>
+    <p class="hero-desc">
+      <strong>Donanım ile yazılımın kesiştiği yerde</strong> projeler üretiyorum.
+      Mikrodenetleyicilerden mobil uygulamalara, kriptografiden mesh ağlarına —
+      bir şeyler inşa etmek asıl motivasyon.
+    </p>
+  </div>
+
+  <div class="divider"></div>
+
+  <section id="about">
+    <div class="section-label">01 / hakkımda</div>
+    <p class="about-text">
+      Lise öğrencisiyim. Bir tarafta <strong>Arduino, ESP32 ve Raspberry Pi</strong> ile donanım projeleri,
+      diğer tarafta <strong>Swift ve Kotlin</strong> ile mobil geliştirme. İkisini bir arada götürmeyi seviyorum.<br><br>
+      Şu an <strong>ESP32 mesh ağı</strong> üzerine hobi projesi yapıyorum, aynı zamanda
+      <strong>SwiftUI</strong> ile arayüz denemeleri ve <strong>Python</strong> ile algoritma pratiği.
+      Önümüzdeki hedef Play Store ve App Store'a ilk uygulamaları çıkarmak.
+    </p>
+  </section>
+
+  <div class="divider"></div>
+
+  <section id="stack">
+    <div class="section-label">02 / teknolojiler</div>
+    <div class="stack-grid">
+      <span class="tag hl">Python</span>
+      <span class="tag hl">Swift</span>
+      <span class="tag hl">Kotlin</span>
+      <span class="tag hl">C++</span>
+      <span class="tag hl">C#</span>
+      <span class="tag">ESP32</span>
+      <span class="tag">Arduino</span>
+      <span class="tag">Raspberry Pi</span>
+      <span class="tag">SwiftUI</span>
+      <span class="tag">PyQt5</span>
+      <span class="tag">AES-256-GCM</span>
+      <span class="tag">scrypt</span>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <section id="projects">
+    <div class="section-label">03 / projeler</div>
+    <a class="project-card" href="https://github.com/Seesternn/LephyCrypt" target="_blank" rel="noopener">
+      <div class="project-top">
+        <span class="project-name">LephyCrypt</span>
+        <svg class="project-link-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M3 13L13 3M13 3H7M13 3V9"/>
+        </svg>
+      </div>
+      <p class="project-desc">
+        AES-256-GCM, scrypt ve HMAC-SHA256 kullanan yerel, açık kaynak dosya şifreleme uygulaması.
+        Bulut yok, hesap yok — her şey makinende kalır. Chunk bazlı AAD ile dosyalar üst düzey
+        bütünlük koruması altında.
+      </p>
+      <div class="project-tags">
+        <span class="project-tag">Python</span>
+        <span class="project-tag">PyQt5</span>
+        <span class="project-tag">AES-256-GCM</span>
+        <span class="project-tag">scrypt</span>
+        <span class="project-tag">kriptografi</span>
+      </div>
+    </a>
+  </section>
+
+  <footer>
+    <span class="footer-text">© 2026 seesternn</span>
+    <span class="footer-quote">"Kod yazmak bir araçtır, asıl olan bir şeyler inşa etmektir."</span>
+  </footer>
+
+</div>
+
+</body>
+</html>
